@@ -1,6 +1,6 @@
 <template>
     <section>
-      <coach-filter @change-filter="setFilter"></coach-filter>>
+      <coach-filter @change-filter="setFilter"></coach-filter>
     </section>
     <section>
         <base-card>
