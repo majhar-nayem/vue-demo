@@ -1,14 +1,20 @@
 <template>
     <section>
+      <base-dialog :show="!!error" title="An Error Occured!" @close="handleError">
+      <p>{{ error }}</p>
+      </base-dialog>
       <coach-filter @change-filter="setFilter"></coach-filter>
     </section>
     <section>
         <base-card>
         <div class="controls">
-        <base-button mode="outline">Load Coaches</base-button>
-        <base-button link to="/register">Register As A Coach</base-button>
+        <base-button mode="outline" @click="loadCoach">Load Coaches</base-button>
+        <base-button link to="/register" v-if="!isLoading">Register As A Coach</base-button>
         </div>
-        <ul v-if="hasCoaches">
+        <div v-if="isLoading">
+          <base-spinner></base-spinner>
+        </div>
+        <ul v-else-if="hasCoaches">
                  <coach-item
                  v-for="coach in filteredCoaches"
                  :key="coach.id"
@@ -28,10 +34,13 @@
 <script>
 import CoachItem from '../../components/coaches/CoachItem.vue';
 import CoachFilter from '../../components/coaches/CoachFilter.vue';
+import BaseDialog from '../../components/UI/BaseDialog.vue';
 export default {
-    components : { CoachItem, CoachFilter },
+    components : { CoachItem, CoachFilter, BaseDialog },
     data(){
       return {
+        error : null,
+        isLoading : false,
         activeFilters : {
           frontend :true,
           backend :true,
@@ -56,12 +65,28 @@ export default {
             });
         },
         hasCoaches(){
-            return this.$store.getters['coaches/hasCoaches'];
+            return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
         }
+    },
+    created(){
+      this.loadCoach();
     },
     methods : {
       setFilter(updatedFilters){
         this.activeFilters = updatedFilters;
+      },
+
+      async loadCoach(){
+        this.isLoading = true;
+        try{
+        await this.$store.dispatch('coaches/loadCoaches');
+        }catch(error){
+          this.error = error.message || "Something Went Wrong!";
+        }
+        this.isLoading = false;
+      },
+      handleError(){
+        this.error = null;
       }
     }
 }

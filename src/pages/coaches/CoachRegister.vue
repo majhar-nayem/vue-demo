@@ -1,5 +1,6 @@
 <template>
 <base-card>
+    <h2>Register As A Course</h2>
   <coach-form @register-coach="registerCoach"></coach-form>
 </base-card>
 </template>
@@ -16,3 +17,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+ h2 {
+     text-align: center;
+ }
+</style>
