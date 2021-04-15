@@ -16,7 +16,10 @@ export default {
             id : userId
         });
     },
-    async loadCoaches(context){
+    async loadCoaches(context, payload){
+        if(!payload.forceUpdate && !context.getters.shouldUpdate){
+            return;
+        }
         const res = await fetch(`https://majharul-islam-vue-app-default-rtdb.firebaseio.com/caoches.json`);
         const data = await res.json();
 
@@ -34,5 +37,6 @@ export default {
             coaches.push(coach);
         }
         context.commit('setData', coaches);
+        context.commit('setLastFetchTimeStamp');
     }
 }
