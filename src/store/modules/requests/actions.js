@@ -17,13 +17,12 @@ export default {
         }
         data.id = resData.name;
 
-        console.log(resData);
-
         context.commit('addRequest',data);
     },
     async loadRequest(context){
         const coachId = context.rootGetters.userId;
-        const res = await fetch(`https://majharul-islam-vue-app-default-rtdb.firebaseio.com/requests/${coachId}.json`)
+        const token = context.rootGetters.token;
+        const res = await fetch(`https://majharul-islam-vue-app-default-rtdb.firebaseio.com/requests/${coachId}.json?auth=`+ token)
         const resData = await res.json();
 
         if(!res.ok){

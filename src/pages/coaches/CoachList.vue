@@ -10,7 +10,7 @@
         <base-card>
         <div class="controls">
         <base-button mode="outline" @click="loadCoach(true)">Load Coaches</base-button>
-        <base-button link to="/register" v-if="!isLoading">Register As A Coach</base-button>
+        <base-button link to="/register" v-if="!isLoading && isAuth">Register As A Coach</base-button>
         </div>
         <div v-if="isLoading">
           <base-spinner></base-spinner>
@@ -68,10 +68,13 @@ export default {
         },
         hasCoaches(){
             return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
+        },
+        isAuth(){
+          return this.$store.getters.isAuth;
         }
     },
     created(){
-      this.loadCoach();
+      this.loadCoach(true);
     },
     methods : {
       setFilter(updatedFilters){

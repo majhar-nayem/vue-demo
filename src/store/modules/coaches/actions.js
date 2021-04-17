@@ -1,7 +1,8 @@
 export default {
    async registerCoach(context, data){
         const userId = context.rootGetters.userId;
-       const res = await fetch(`https://majharul-islam-vue-app-default-rtdb.firebaseio.com/caoches/${userId}.json`, {
+        const token = context.rootGetters.token;
+       const res = await fetch(`https://majharul-islam-vue-app-default-rtdb.firebaseio.com/caoches/${userId}.json?auth=` + token, {
             method : 'PUT',
             body : JSON.stringify(data)
         })
